@@ -2,18 +2,17 @@
 "use client";
 
 import React from "react";
-import axios from "axios";
 import { signupAPI } from "@/utils/ApiRequests";
 import { ToastService } from "@/services/toast";
 import { SignUpForm } from "@/components";
 import { useRouter } from "next/navigation";
+import HttpService from "@/services/httpService";
 
 export default function SignUpPage() {
   const router = useRouter();
 
   const handleSubmit = (data) => {
-    axios
-      .post(signupAPI, data)
+    HttpService.fetch("POST", signupAPI, data)
       .then((res) => {
         console.log(res.data);
         ToastService.success("Registered successfully.");

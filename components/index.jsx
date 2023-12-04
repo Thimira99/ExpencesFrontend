@@ -3,3 +3,4 @@ export * from "./signupForm";
 export * from "./expenseForm";
 export * from "./expenseDialog";
 export * from "./categoryDialog";
+export * from "./editExpenseDialog";

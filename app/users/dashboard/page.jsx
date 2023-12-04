@@ -3,24 +3,22 @@
 
 import React, { useEffect, useState } from "react";
 import { DataGrid } from "@mui/x-data-grid";
-import axios from "axios";
 import {
   addCategorie,
   addExpenses,
+  deleteExpenseById,
   getCategories,
+  getExpenseById,
   getExpenses,
   getFilterExpenses,
+  updateExpenseById,
 } from "@/utils/ApiRequests";
-import { createHeader } from "@/utils/createHeader";
+import { Box, Button, MenuItem, TextField, Typography } from "@mui/material";
 import {
-  Button,
-  Container,
-  MenuItem,
-  TextField,
-  Typography,
-} from "@mui/material";
-import CircularProgress from "@mui/material/CircularProgress";
-import { AddCategoryDialog, ExpenseDialog } from "@/components";
+  AddCategoryDialog,
+  EditExpenseDialog,
+  ExpenseDialog,
+} from "@/components";
 import { ToastService } from "@/services/toast";
 import { convertToIsoDate } from "@/utils/convertDate";
 
@@ -28,35 +26,42 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
 import CategoryIcon from "@mui/icons-material/Category";
+import CircularProgress from "@mui/material/CircularProgress";
+import HttpService from "@/services/httpService";
 
 export default function Dashboard() {
-  const header = createHeader();
-
   const [userDate, setUserData] = useState([]);
   const [userCategories, setUserCategories] = useState([]);
+  const [userExpense, setUserExpense] = useState();
 
+  // Modal status
   const [isAddExpenseOpen, setIsAddExpenseOpen] = useState(false);
+  const [isEditExpenseOpen, setIsEditExpenseOpen] = useState(false);
+  const [isAddCategoryOpen, setIsAddCategoryOpen] = useState(false);
+
   const [newExpenseData, setNewExpenseData] = useState({
     date: "",
     category: "",
     description: "",
     amount: "",
   });
-
-  const [isAddCategoryOpen, setIsAddCategoryOpen] = useState(false);
   const [newCategoryData, setNewCategoryData] = useState({
     category: "",
   });
-
   const [filterCategory, setfilterCategoryData] = useState({
     category: "",
   });
 
+  // Loading status
+  const [loading, setLoading] = useState(false);
+  const [editLoading, setEditLoading] = useState(false);
+
   // Fetch Expenses and User Categories concurrently using Promise.all
   useEffect(() => {
+    setLoading(true);
     Promise.all([
-      axios.get(getExpenses, header),
-      axios.get(getCategories, header),
+      HttpService.fetch("GET", getExpenses),
+      HttpService.fetch("GET", getCategories),
     ])
       .then(([expensesRes, categoriesRes]) => {
         setUserData(expensesRes.data);
@@ -64,6 +69,9 @@ export default function Dashboard() {
       })
       .catch((error) => {
         ToastService.error(error.response.data.message);
+      })
+      .finally(() => {
+        setLoading(false);
       });
   }, []);
 
@@ -102,32 +110,47 @@ export default function Dashboard() {
 
   const getRowId = (row) => row._id;
 
+  // Handle edit expense
   const handleEdit = (id) => {
-    console.log(`Edit clicked for ID: ${id}`);
-    // Add logic for editing expense
+    setEditLoading(true);
+
+    HttpService.fetch("GET", getExpenseById + `/${id}`)
+      .then((res) => {
+        if (res.data) {
+          setUserExpense(res.data);
+          setIsEditExpenseOpen(true);
+        } else {
+          console.log("Data is undefined or null");
+        }
+      })
+      .catch((error) => {
+        console.error("Error fetching expense by ID:", error);
+      })
+      .finally(() => {
+        setEditLoading(false);
+      });
   };
 
+  // Add logic for deleting expense
   const handleDelete = (id) => {
-    console.log(`Delete clicked for ID: ${id}`);
-    // Add logic for deleting expense
+    setLoading(true);
+    HttpService.fetch("DELETE", deleteExpenseById + `/${id}`).then((res) => {
+      ToastService.success(res.data.message);
+
+      HttpService.fetch("GET", getExpenses)
+        .then((res) => {
+          setUserData(res.data);
+        })
+        .catch((error) => {
+          ToastService.error(error.response.data);
+        })
+        .finally(() => {
+          setLoading(false);
+        });
+    });
   };
 
-  const handleAddExpense = () => {
-    setIsAddExpenseOpen(true);
-  };
-
-  const handleCloseAddExpense = () => {
-    setIsAddExpenseOpen(false);
-  };
-
-  const handleAddCategory = () => {
-    setIsAddCategoryOpen(true);
-  };
-
-  const handleCloseAddCategory = () => {
-    setIsAddCategoryOpen(false);
-  };
-
+  // Input changes
   const handleCategoryInputChange = (e) => {
     const { name, value } = e.target;
     setNewCategoryData((prevData) => ({
@@ -144,31 +167,47 @@ export default function Dashboard() {
     }));
   };
 
+  const handleEditExpenseChange = (e) => {
+    const { name, value } = e.target;
+    console.log(name, value);
+    setUserExpense((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+  };
+
+  // Handle save category
   const handleSaveCategory = () => {
-    // Add logic to save category
-    axios
-      .put(addCategorie, newCategoryData, header)
+    const { category } = newCategoryData;
+
+    HttpService.fetch("PUT", addCategorie, newCategoryData)
       .then((res) => {
         setIsAddCategoryOpen(false);
+
+        // Update userCategories with the new category data
+        setUserCategories((prevCategories) => [...prevCategories, category]);
+
         setNewCategoryData({
           category: "",
         });
-        ToastService.success("Added successfuly");
+        ToastService.success("Added successfully");
       })
       .catch((error) => {
         console.error("Error adding expense:", error);
       });
   };
 
+  // Handle save expense
   const handleSaveExpense = () => {
     const { date, amount, ...rest } = newExpenseData;
     const isoDate = convertToIsoDate(date);
     const amountNumber = Number(amount);
     const updatedExpenseData = { ...rest, date: isoDate, amount: amountNumber };
 
+    console.log(updatedExpenseData);
+
     // Make axios call
-    axios
-      .post(addExpenses, updatedExpenseData, header)
+    HttpService.fetch("POST", addExpenses, updatedExpenseData)
       .then((res) => {
         setUserData([...userDate, res.data]);
         setIsAddExpenseOpen(false);
@@ -185,14 +224,52 @@ export default function Dashboard() {
       });
   };
 
+  // Handle save category
+  const handleEditExpense = () => {
+    const { date, amount, ...rest } = userExpense;
+    const isoDate = convertToIsoDate(date);
+    const amountNumber = Number(amount);
+    const updatedEditExpenseData = {
+      ...rest,
+      date: isoDate,
+      amount: amountNumber,
+    };
+
+    HttpService.fetch(
+      "PUT",
+      updateExpenseById + `/${updatedEditExpenseData._id}`,
+      updatedEditExpenseData
+    )
+      .then((res) => {
+        ToastService.success(res.data.message);
+        HttpService.fetch("GET", getExpenses)
+          .then((res) => {
+            setUserData(res.data);
+          })
+          .catch((error) => {
+            ToastService.error(error.response.data);
+          });
+      })
+      .catch((error) => {
+        ToastService.error(error.response.data.message);
+      })
+      .finally(() => {
+        setIsEditExpenseOpen(false);
+      });
+  };
+
+  // Handle filter change
   const onFilterChange = (e) => {
     e.preventDefault();
     setfilterCategoryData(e.target.value);
+    setLoading(true);
 
-    axios
-      .get(getFilterExpenses + `?category=${e.target.value}`, header)
+    HttpService.fetch("GET", getFilterExpenses + `?category=${e.target.value}`)
       .then((res) => {
         setUserData(res.data);
+      })
+      .finally(() => {
+        setLoading(false);
       });
   };
 
@@ -233,18 +310,20 @@ export default function Dashboard() {
           ))}
         </TextField>
         <Button
+          sx={{ width: "30%" }}
           variant="contained"
           color="primary"
           startIcon={<AttachMoneyIcon />}
-          onClick={handleAddExpense}
+          onClick={() => setIsAddExpenseOpen(true)}
         >
           Add Expense
         </Button>
         <Button
+          sx={{ width: "30%" }}
           variant="contained"
           color="primary"
           startIcon={<CategoryIcon />}
-          onClick={handleAddCategory}
+          onClick={() => setIsAddCategoryOpen(true)}
         >
           Add Category
         </Button>
@@ -259,17 +338,25 @@ export default function Dashboard() {
           boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
         }}
       >
-        <DataGrid
-          rows={userDate}
-          columns={columns}
-          pageSize={5}
-          checkboxSelection
-          getRowId={getRowId}
-        />
+        {loading || editLoading ? (
+          <Box
+            sx={{ display: "flex", justifyContent: "center", marginTop: 20 }}
+          >
+            <CircularProgress />
+          </Box>
+        ) : (
+          <DataGrid
+            rows={userDate}
+            columns={columns}
+            pageSize={5}
+            checkboxSelection
+            getRowId={getRowId}
+          />
+        )}
       </div>
       <ExpenseDialog
         isOpen={isAddExpenseOpen}
-        onClose={handleCloseAddExpense}
+        onClose={() => setIsAddExpenseOpen(false)}
         onSave={handleSaveExpense}
         formData={newExpenseData}
         onInputChange={handleInputChange}
@@ -277,10 +364,18 @@ export default function Dashboard() {
       />
       <AddCategoryDialog
         isOpen={isAddCategoryOpen}
-        onClose={handleCloseAddCategory}
+        onClose={() => setIsAddCategoryOpen(false)}
         onSave={handleSaveCategory}
         formData={newCategoryData}
         onInputChange={handleCategoryInputChange}
+      />
+      <EditExpenseDialog
+        isOpen={isEditExpenseOpen}
+        onClose={() => setIsEditExpenseOpen(false)}
+        onSave={handleEditExpense}
+        formData={userExpense}
+        onInputChange={handleEditExpenseChange}
+        categoryOptions={userCategories}
       />
     </div>
   );
