@@ -3,12 +3,10 @@
 
 import React, { useState } from "react";
 import Typography from "@mui/material/Typography";
-import { BarChart, ChartCard } from "@/components";
+import { BarChart, ChartCard, DialogBox } from "@/components";
 import HttpService from "@/services/httpService";
 import { getDayDetails, getMonthDetails } from "@/utils/ApiRequests";
 import { months } from "@/utils/months";
-import Image from "next/image";
-import { DialogBox } from "@/components/Dialog/dialog";
 import { Button, TextField } from "@mui/material";
 
 export default function Details() {

@@ -14,7 +14,7 @@ import {
   updateExpenseById,
 } from "@/utils/ApiRequests";
 import { Box, Button, MenuItem, TextField, Typography } from "@mui/material";
-import { EditExpenseForm, ExpenseForm } from "@/components";
+import { DialogBox, EditExpenseForm, ExpenseForm } from "@/components";
 import { ToastService } from "@/services/toast";
 import { convertToIsoDate } from "@/utils/convertDate";
 
@@ -25,7 +25,6 @@ import CategoryIcon from "@mui/icons-material/Category";
 import CircularProgress from "@mui/material/CircularProgress";
 import HttpService from "@/services/httpService";
 import { useRouter } from "next/navigation";
-import { DialogBox } from "@/components/Dialog/dialog";
 
 export default function Dashboard() {
   const router = useRouter();
