@@ -2,12 +2,14 @@
 "use client";
 
 import React from "react";
-import { TextField, MenuItem } from "@mui/material";
+import { TextField, MenuItem, Button } from "@mui/material";
 
 export const EditExpenseForm = ({
   formData,
   onInputChange,
   categoryOptions,
+  onClose,
+  onSave,
 }) => {
   return (
     <>
@@ -52,6 +54,10 @@ export const EditExpenseForm = ({
         value={formData.amount}
         onChange={onInputChange}
       />
+      <Button onClick={onClose}>Cancel</Button>
+      <Button onClick={onSave} color="primary">
+        Save
+      </Button>
     </>
   );
 };

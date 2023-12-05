@@ -13,3 +13,6 @@ export const getFilterExpenses = `${host}/expense`;
 
 export const getCategories = `${host}/user/categories`;
 export const addCategorie = `${host}/user/categories`;
+
+export const getDayDetails = `${host}/expense/filter/filteredvaluesByDay`;
+export const getMonthDetails = `${host}/expense/filter/filteredvaluesByMonth`;

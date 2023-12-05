@@ -14,11 +14,7 @@ import {
   updateExpenseById,
 } from "@/utils/ApiRequests";
 import { Box, Button, MenuItem, TextField, Typography } from "@mui/material";
-import {
-  AddCategoryDialog,
-  EditExpenseDialog,
-  ExpenseDialog,
-} from "@/components";
+import { EditExpenseForm, ExpenseForm } from "@/components";
 import { ToastService } from "@/services/toast";
 import { convertToIsoDate } from "@/utils/convertDate";
 
@@ -28,8 +24,12 @@ import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
 import CategoryIcon from "@mui/icons-material/Category";
 import CircularProgress from "@mui/material/CircularProgress";
 import HttpService from "@/services/httpService";
+import { useRouter } from "next/navigation";
+import { DialogBox } from "@/components/Dialog/dialog";
 
 export default function Dashboard() {
+  const router = useRouter();
+
   const [userDate, setUserData] = useState([]);
   const [userCategories, setUserCategories] = useState([]);
   const [userExpense, setUserExpense] = useState();
@@ -280,9 +280,14 @@ export default function Dashboard() {
         flexDirection: "column",
         alignItems: "center",
         justifyContent: "center",
+        marginTop: 80,
+        padding: "1rem", // Add padding for better spacing
       }}
     >
-      <Typography variant="h4" style={{ marginBottom: 20 }}>
+      <Typography
+        variant="h4"
+        style={{ marginBottom: 20, textAlign: "center" }}
+      >
         Expense Management Dashboard
       </Typography>
       <div
@@ -290,7 +295,7 @@ export default function Dashboard() {
           display: "flex",
           gap: 10,
           justifyContent: "space-between",
-          width: "60%",
+          width: "80%", // Adjust width to 100%
           marginTop: 20,
         }}
       >
@@ -328,14 +333,24 @@ export default function Dashboard() {
           Add Category
         </Button>
       </div>
+      <Button
+        sx={{ width: "30%", marginTop: 10 }}
+        variant="contained"
+        color="primary"
+        startIcon={<AttachMoneyIcon />}
+        onClick={() => router.push("/users/details")}
+      >
+        See Monthly and Daily details
+      </Button>
       <div
         style={{
           height: 400,
-          width: "60%",
+          width: "70%", // Adjust width to 100%
           padding: 20,
           background: "#fff",
           borderRadius: 8,
           boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
+          marginTop: 20,
         }}
       >
         {loading || editLoading ? (
@@ -354,29 +369,54 @@ export default function Dashboard() {
           />
         )}
       </div>
-      <ExpenseDialog
+      <DialogBox
         isOpen={isAddExpenseOpen}
+        title="Add Expense"
         onClose={() => setIsAddExpenseOpen(false)}
-        onSave={handleSaveExpense}
-        formData={newExpenseData}
-        onInputChange={handleInputChange}
-        categoryOptions={userCategories}
-      />
-      <AddCategoryDialog
+      >
+        <ExpenseForm
+          formData={newExpenseData}
+          categoryOptions={userCategories}
+          onInputChange={handleInputChange}
+          onSave={handleSaveExpense}
+          onClose={() => setIsAddExpenseOpen(false)}
+        />
+      </DialogBox>
+
+      <DialogBox
         isOpen={isAddCategoryOpen}
+        title="Add Category"
         onClose={() => setIsAddCategoryOpen(false)}
-        onSave={handleSaveCategory}
-        formData={newCategoryData}
-        onInputChange={handleCategoryInputChange}
-      />
-      <EditExpenseDialog
+      >
+        <TextField
+          label="Category Name"
+          fullWidth
+          margin="normal"
+          name="category"
+          value={newCategoryData.category}
+          onChange={handleCategoryInputChange}
+        />
+        <Button onClick={() => setIsAddCategoryOpen(false)} color="primary">
+          Cancel
+        </Button>
+        <Button onClick={handleSaveCategory} color="primary">
+          Save
+        </Button>
+      </DialogBox>
+
+      <DialogBox
         isOpen={isEditExpenseOpen}
+        title="Edit Expense"
         onClose={() => setIsEditExpenseOpen(false)}
-        onSave={handleEditExpense}
-        formData={userExpense}
-        onInputChange={handleEditExpenseChange}
-        categoryOptions={userCategories}
-      />
+      >
+        <EditExpenseForm
+          formData={userExpense}
+          categoryOptions={userCategories}
+          onInputChange={handleEditExpenseChange}
+          onSave={handleEditExpense}
+          onClose={() => setIsEditExpenseOpen(false)}
+        />
+      </DialogBox>
     </div>
   );
 }
