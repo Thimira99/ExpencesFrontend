@@ -10,7 +10,7 @@ export const ChartCard = ({ onClick, title, subtitle, imagePath }) => {
     <Card
       sx={{
         minWidth: 300,
-        maxWidth: 400, // Adjust the maximum width based on your design
+        maxWidth: 400,
         margin: "1rem",
         "@media (max-width: 600px)": {
           minWidth: "100%", // Full width on small screens
@@ -23,7 +23,7 @@ export const ChartCard = ({ onClick, title, subtitle, imagePath }) => {
           component="img"
           height="140"
           alt="green iguana"
-          src={imagePath} // Use the provided imagePath prop
+          src={imagePath}
         />
         <CardContent>
           <Typography gutterBottom variant="h5" component="div">

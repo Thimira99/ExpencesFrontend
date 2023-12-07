@@ -11,7 +11,7 @@ export default function Home() {
         Welcome to the Expense Management System
       </Typography>
       <Box>
-        <Link href={"/users/login"}>
+        <Link href={"/login"}>
           <Button className={styles.button}>Get Started</Button>
         </Link>
       </Box>

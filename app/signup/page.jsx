@@ -88,66 +88,68 @@ const SignUpPage = () => {
   };
 
   return (
-    <Box
-      display="flex"
-      flexDirection="column"
-      maxWidth={500}
-      alignItems="center"
-      justifyContent="center"
-      margin="auto"
-      marginTop={25}
-      padding={5}
-      borderRadius={10}
-      boxShadow="5px 5px 5px #ccc"
-    >
-      <Typography variant="h3" padding={3}>
-        Sign up
-      </Typography>
-      <TextField
-        type="text"
-        variant="outlined"
-        margin="normal"
-        value={inputs.name}
-        placeholder="First Name"
-        onChange={(e) => handleChange("name", e.target.value)}
-        error={Boolean(errors.name)}
-        helperText={errors.name}
-        required
-      />
-      <TextField
-        type="email"
-        name="email"
-        variant="outlined"
-        margin="normal"
-        value={inputs.email}
-        placeholder="Email"
-        onChange={(e) => handleChange("email", e.target.value)}
-        error={Boolean(errors.email)}
-        helperText={errors.email}
-        required
-      />
-      <TextField
-        type="password"
-        name="password"
-        variant="outlined"
-        margin="normal"
-        value={inputs.password}
-        placeholder="Password"
-        onChange={(e) => handleChange("password", e.target.value)}
-        error={Boolean(errors.password)}
-        helperText={errors.password}
-        required
-      />
-      <Button
-        sx={{ marginTop: 3 }}
-        variant="contained"
-        type="submit"
-        onClick={handleSubmit}
+    <div>
+      <Box
+        display="flex"
+        flexDirection="column"
+        maxWidth={500}
+        alignItems="center"
+        justifyContent="center"
+        margin="auto"
+        marginTop={25}
+        padding={5}
+        borderRadius={10}
+        boxShadow="5px 5px 5px #ccc"
       >
-        Sign up
-      </Button>
-      <Link href={"/users/login"}>Login</Link>
-    </Box>
+        <Typography variant="h3" padding={3}>
+          Sign up
+        </Typography>
+        <TextField
+          type="text"
+          variant="outlined"
+          margin="normal"
+          value={inputs.name}
+          placeholder="First Name"
+          onChange={(e) => handleChange("name", e.target.value)}
+          error={Boolean(errors.name)}
+          helperText={errors.name}
+          required
+        />
+        <TextField
+          type="email"
+          name="email"
+          variant="outlined"
+          margin="normal"
+          value={inputs.email}
+          placeholder="Email"
+          onChange={(e) => handleChange("email", e.target.value)}
+          error={Boolean(errors.email)}
+          helperText={errors.email}
+          required
+        />
+        <TextField
+          type="password"
+          name="password"
+          variant="outlined"
+          margin="normal"
+          value={inputs.password}
+          placeholder="Password"
+          onChange={(e) => handleChange("password", e.target.value)}
+          error={Boolean(errors.password)}
+          helperText={errors.password}
+          required
+        />
+        <Button
+          sx={{ marginTop: 3 }}
+          variant="contained"
+          type="submit"
+          onClick={handleSubmit}
+        >
+          Sign up
+        </Button>
+        <Link href={"/login"}>Login</Link>
+      </Box>
+    </div>
   );
 };
 

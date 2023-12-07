@@ -13,7 +13,14 @@ import {
   getFilterExpenses,
   updateExpenseById,
 } from "@/utils/ApiRequests";
-import { Box, Button, MenuItem, TextField, Typography } from "@mui/material";
+import {
+  Badge,
+  Box,
+  Button,
+  MenuItem,
+  TextField,
+  Typography,
+} from "@mui/material";
 import { DialogBox, EditExpenseForm, ExpenseForm } from "@/components";
 import { ToastService } from "@/services/toast";
 import { convertToIsoDate } from "@/utils/convertDate";
@@ -24,11 +31,8 @@ import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
 import CategoryIcon from "@mui/icons-material/Category";
 import CircularProgress from "@mui/material/CircularProgress";
 import HttpService from "@/services/httpService";
-import { useRouter } from "next/navigation";
 
 export default function Dashboard() {
-  const router = useRouter();
-
   const [userDate, setUserData] = useState([]);
   const [userCategories, setUserCategories] = useState([]);
   const [userExpense, setUserExpense] = useState();
@@ -260,6 +264,8 @@ export default function Dashboard() {
   // Handle filter change
   const onFilterChange = (e) => {
     e.preventDefault();
+    console.log("Came nnn");
+
     setfilterCategoryData(e.target.value);
     setLoading(true);
 
@@ -287,7 +293,7 @@ export default function Dashboard() {
         variant="h4"
         style={{ marginBottom: 20, textAlign: "center" }}
       >
-        Expense Management Dashboard
+        My Expenses
       </Typography>
       <div
         style={{
@@ -332,15 +338,6 @@ export default function Dashboard() {
           Add Category
         </Button>
       </div>
-      <Button
-        sx={{ width: "30%", marginTop: 10 }}
-        variant="contained"
-        color="primary"
-        startIcon={<AttachMoneyIcon />}
-        onClick={() => router.push("/users/details")}
-      >
-        See Monthly and Daily details
-      </Button>
       <div
         style={{
           height: 400,

@@ -25,8 +25,6 @@ class HttpService {
   static async fetch(method, path, data, params, anonymous) {
     const axios = anonymous ? this.instanceWithoutAuth : this.instance;
 
-    console.log(axios);
-
     const response = axios({
       method,
       url: path,

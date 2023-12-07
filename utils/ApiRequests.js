@@ -16,3 +16,6 @@ export const addCategorie = `${host}/user/categories`;
 
 export const getDayDetails = `${host}/expense/filter/filteredvaluesByDay`;
 export const getMonthDetails = `${host}/expense/filter/filteredvaluesByMonth`;
+
+export const getMonthToDate = `${host}/expense/categories/month-to-date`;
+export const getYearToDate = `${host}/expense/categories/year-to-date`;

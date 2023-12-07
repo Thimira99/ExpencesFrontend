@@ -82,57 +82,59 @@ const Login = () => {
   };
 
   return (
-    <Box
-      display="flex"
-      flexDirection="column"
-      maxWidth={500}
-      alignItems="center"
-      justifyContent="center"
-      margin="auto"
-      marginTop={30}
-      padding={5}
-      borderRadius={10}
-      boxShadow="5px 5px 5px #ccc"
-    >
-      <Typography variant="h3" padding={3}>
-        Login
-      </Typography>
-      <TextField
-        label="Email"
-        type="email"
-        variant="outlined"
-        margin="normal"
-        value={formData.email}
-        placeholder="Email"
-        onChange={(e) => handleChange("email", e.target.value)}
-        error={Boolean(errors.email)}
-        helperText={errors.email}
-        required
-      />
-      <TextField
-        label="Password"
-        type="password"
-        placeholder="Password"
-        value={formData.password}
-        onChange={(e) => handleChange("password", e.target.value)}
-        error={Boolean(errors.password)}
-        helperText={errors.password}
-        required
-      />
-      <Button
-        sx={{ marginTop: 3 }}
-        variant="contained"
-        type="submit"
-        onClick={handleSubmit}
+    <div>
+      <Box
+        display="flex"
+        flexDirection="column"
+        maxWidth={500}
+        alignItems="center"
+        justifyContent="center"
+        margin="auto"
+        marginTop={30}
+        padding={5}
+        borderRadius={10}
+        boxShadow="5px 5px 5px #ccc"
       >
-        Login
-      </Button>
-      <Link href={"/users/signup"}>
-        <Button sx={{ marginTop: 3 }} variant="text">
-          Sign up
+        <Typography variant="h3" padding={3}>
+          Login
+        </Typography>
+        <TextField
+          label="Email"
+          type="email"
+          variant="outlined"
+          margin="normal"
+          value={formData.email}
+          placeholder="Email"
+          onChange={(e) => handleChange("email", e.target.value)}
+          error={Boolean(errors.email)}
+          helperText={errors.email}
+          required
+        />
+        <TextField
+          label="Password"
+          type="password"
+          placeholder="Password"
+          value={formData.password}
+          onChange={(e) => handleChange("password", e.target.value)}
+          error={Boolean(errors.password)}
+          helperText={errors.password}
+          required
+        />
+        <Button
+          sx={{ marginTop: 3 }}
+          variant="contained"
+          type="submit"
+          onClick={handleSubmit}
+        >
+          Login
         </Button>
-      </Link>
-    </Box>
+        <Link href={"/signup"}>
+          <Button sx={{ marginTop: 3 }} variant="text">
+            Sign up
+          </Button>
+        </Link>
+      </Box>
+    </div>
   );
 };
 
