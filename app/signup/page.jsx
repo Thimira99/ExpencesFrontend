@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { Typography, Box, TextField, Button } from "@mui/material";
+import { Typography, Box, TextField, Button, Container } from "@mui/material";
 import * as yup from "yup";
 import Link from "next/link";
 import { ToastService } from "@/services/toast";
@@ -73,12 +73,13 @@ const SignUpPage = () => {
       ),
   });
 
+  // Handle signup
   const handleSignUp = (data) => {
     HttpService.fetch("POST", signupAPI, data)
       .then((res) => {
         console.log(res.data);
         ToastService.success("Registered successfully.");
-        router.push("/users/login");
+        router.push("/login");
       })
       .catch((err) => {
         if (err.response.data) {
@@ -88,7 +89,7 @@ const SignUpPage = () => {
   };
 
   return (
-    <div>
+    <Container>
       <Box
         display="flex"
         flexDirection="column"
@@ -147,9 +148,13 @@ const SignUpPage = () => {
         >
           Sign up
         </Button>
-        <Link href={"/login"}>Login</Link>
+        <Link href={"/login"}>
+          <Button sx={{ marginTop: 3 }} variant="text" color="primary">
+            Login
+          </Button>
+        </Link>
       </Box>
-    </div>
+    </Container>
   );
 };
 

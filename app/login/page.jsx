@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { Box, Button, TextField, Typography } from "@mui/material";
+import { Box, Button, Container, TextField, Typography } from "@mui/material";
 import * as yup from "yup";
 import Link from "next/link";
 import { ToastService } from "@/services/toast";
@@ -60,6 +60,7 @@ const Login = () => {
     password: yup.string().required("Password is required"),
   });
 
+  // Handle login
   const handleLogin = (data) => {
     HttpService.fetch("POST", loginAPI, data)
       .then((res) => {
@@ -82,7 +83,7 @@ const Login = () => {
   };
 
   return (
-    <div>
+    <Container>
       <Box
         display="flex"
         flexDirection="column"
@@ -123,18 +124,19 @@ const Login = () => {
         <Button
           sx={{ marginTop: 3 }}
           variant="contained"
+          color="primary"
           type="submit"
           onClick={handleSubmit}
         >
           Login
         </Button>
         <Link href={"/signup"}>
-          <Button sx={{ marginTop: 3 }} variant="text">
+          <Button sx={{ marginTop: 3 }} variant="text" color="primary">
             Sign up
           </Button>
         </Link>
       </Box>
-    </div>
+    </Container>
   );
 };
 

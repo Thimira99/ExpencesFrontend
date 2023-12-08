@@ -1,4 +1,3 @@
-// Details.js
 "use client";
 
 import React, { useState } from "react";
@@ -12,21 +11,31 @@ import {
   getYearToDate,
 } from "@/utils/ApiRequests";
 import { months } from "@/utils/months";
-import { Button, TextField } from "@mui/material";
+import {
+  Box,
+  Button,
+  CircularProgress,
+  Container,
+  TextField,
+} from "@mui/material";
 import { getCurrentDate } from "@/utils/convertDate";
 import { ToastService } from "@/services/toast";
 
 export default function Details() {
+  // Dialog box open
   const [dailyDialogOpen, setDailyDialogOpen] = useState(false);
   const [monthlyDialogOpen, setMonthlyDialogOpen] = useState(false);
-
   const [monthToDateOpen, setMonthToDateOpen] = useState(false);
   const [yearToDateOpen, setYearToDateOpen] = useState(false);
 
+  // Charts data
   const [chartData, setChartData] = useState();
   const [monthlyChartData, setMonthlyChartData] = useState();
   const [monthToDateData, setMonthToDateData] = useState();
   const [yearToDateData, setYearToDateData] = useState();
+
+  // Loading state
+  const [loading, setLoading] = useState(false);
 
   const [formData, setFormData] = useState({
     selectedDate: "",
@@ -38,6 +47,7 @@ export default function Details() {
     selectedMonth: "",
   });
 
+  // Handle change
   const handleChange = (event) => {
     const { name, value } = event.target;
     setFormData((prevData) => ({
@@ -46,7 +56,7 @@ export default function Details() {
     }));
   };
 
-  //Month
+  // Handle monthly change
   const handleMonthChange = (event) => {
     const { name, value } = event.target;
     setMonthFormData((prevData) => ({
@@ -55,7 +65,9 @@ export default function Details() {
     }));
   };
 
+  // Handle save
   const handleSave = () => {
+    setLoading(true);
     HttpService.fetch(
       "GET",
       getDayDetails +
@@ -66,11 +78,15 @@ export default function Details() {
       })
       .catch((error) => {
         ToastService.error(error.response.data.message);
+      })
+      .finally(() => {
+        setLoading(false);
       });
   };
 
-  //Month
+  // Handle monthly save
   const handleMonthSave = () => {
+    setLoading(true);
     HttpService.fetch(
       "GET",
       getMonthDetails +
@@ -81,14 +97,18 @@ export default function Details() {
       })
       .catch((error) => {
         ToastService.error(error.response.data.message);
+      })
+      .finally(() => {
+        setLoading(false);
       });
   };
 
-  //Month to date
+  // Handle Month to date
   const handleMonthToDate = () => {
     setMonthToDateOpen(true);
     const currentDate = getCurrentDate();
-    console.log(currentDate);
+
+    setLoading(true);
 
     HttpService.fetch("GET", getMonthToDate + `?date=${currentDate}`)
       .then((res) => {
@@ -96,13 +116,18 @@ export default function Details() {
       })
       .catch((error) => {
         ToastService.error(error.response.data.message);
+      })
+      .finally(() => {
+        setLoading(false);
       });
   };
 
-  //Month to date
+  //Handle month to date
   const handleYearToDate = () => {
     setYearToDateOpen(true);
     const currentDate = getCurrentDate();
+
+    setLoading(true);
 
     HttpService.fetch("GET", getYearToDate + `?date=${currentDate}`)
       .then((res) => {
@@ -110,11 +135,14 @@ export default function Details() {
       })
       .catch((error) => {
         ToastService.error(error.response.data.message);
+      })
+      .finally(() => {
+        setLoading(false);
       });
   };
 
   return (
-    <div
+    <Container
       style={{
         display: "flex",
         flexDirection: "column",
@@ -131,40 +159,49 @@ export default function Details() {
       >
         Expense Details
       </Typography>
-      <div
+      <Container
         style={{
           display: "flex",
           flexDirection: "row",
           gap: "1rem",
           flexWrap: "wrap",
           justifyContent: "center",
+          width: "100%",
         }}
       >
         <ChartCard
           onClick={() => setDailyDialogOpen(true)}
           title="Daily"
           subtitle="Bar chart Daily"
+          minWidth={300}
+          maxWidth={400}
           imagePath="https://atlas-content-cdn.pixelsquid.com/stock-images/bar-graph-y1KAkP1-600.jpg"
         />
         <ChartCard
           onClick={() => setMonthlyDialogOpen(true)}
           title="Monthly"
           subtitle="Bar chart Monthly"
+          minWidth={300}
+          maxWidth={400}
           imagePath="https://atlas-content-cdn.pixelsquid.com/stock-images/bar-graph-y1KAkP1-600.jpg"
         />
         <ChartCard
           onClick={handleMonthToDate}
           title="Month to Date"
           subtitle="Bar chart Total Month to Date"
+          minWidth={300}
+          maxWidth={400}
           imagePath="https://atlas-content-cdn.pixelsquid.com/stock-images/bar-graph-y1KAkP1-600.jpg"
         />
         <ChartCard
           onClick={handleYearToDate}
           title="Year to date"
           subtitle="Bar chart Total Year To Date"
+          minWidth={300}
+          maxWidth={400}
           imagePath="https://atlas-content-cdn.pixelsquid.com/stock-images/bar-graph-y1KAkP1-600.jpg"
         />
-      </div>
+      </Container>
 
       <DialogBox
         isOpen={dailyDialogOpen}
@@ -172,16 +209,12 @@ export default function Details() {
         title="Daily Detils"
       >
         <TextField
-          label="Select Date"
           type="date"
           name="selectedDate"
           value={formData.selectedDate}
           onChange={(e) => handleChange(e)}
           fullWidth
           margin="normal"
-          InputLabelProps={{
-            shrink: true,
-          }}
         />
         <TextField
           select
@@ -199,8 +232,17 @@ export default function Details() {
           <option value="average">Average</option>
           <option value="total">Total</option>
         </TextField>
-        {chartData && <BarChart data={chartData} />}
-        <Button onClick={() => setDailyDialogOpen(false)}>Cancel</Button>
+        {loading ? (
+          <Box sx={{ display: "flex", justifyContent: "center", padding: 10 }}>
+            <CircularProgress />
+          </Box>
+        ) : (
+          <>{chartData && <BarChart data={chartData} />}</>
+        )}
+
+        <Button onClick={() => setDailyDialogOpen(false)} color="primary">
+          Cancel
+        </Button>
         <Button variant="contained" color="primary" onClick={handleSave}>
           Filter
         </Button>
@@ -243,18 +285,34 @@ export default function Details() {
             </option>
           ))}
         </TextField>
-        {monthlyChartData && <BarChart data={monthlyChartData} />}
-        <Button onClick={() => setMonthlyDialogOpen(false)}>Cancel</Button>
+        {loading ? (
+          <Box sx={{ display: "flex", justifyContent: "center", padding: 10 }}>
+            <CircularProgress />
+          </Box>
+        ) : (
+          <>{monthlyChartData && <BarChart data={monthlyChartData} />}</>
+        )}
+
+        <Button onClick={() => setMonthlyDialogOpen(false)} color="primary">
+          Cancel
+        </Button>
         <Button variant="contained" color="primary" onClick={handleMonthSave}>
           Filter
         </Button>
       </DialogBox>
+
       <DialogBox
         isOpen={monthToDateOpen}
         onClose={() => setMonthToDateOpen(false)}
         title="Month To Date"
       >
-        {monthToDateData && <BarChart data={monthToDateData} />}
+        {loading ? (
+          <Box sx={{ display: "flex", justifyContent: "center", padding: 10 }}>
+            <CircularProgress />
+          </Box>
+        ) : (
+          <>{monthToDateData && <BarChart data={monthToDateData} />}</>
+        )}
       </DialogBox>
 
       <DialogBox
@@ -262,8 +320,14 @@ export default function Details() {
         onClose={() => setYearToDateOpen(false)}
         title="Year To Date"
       >
-        {yearToDateData && <BarChart data={yearToDateData} />}
+        {loading ? (
+          <Box sx={{ display: "flex", justifyContent: "center", padding: 10 }}>
+            <CircularProgress />
+          </Box>
+        ) : (
+          <>{yearToDateData && <BarChart data={yearToDateData} />}</>
+        )}
       </DialogBox>
-    </div>
+    </Container>
   );
 }

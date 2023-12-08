@@ -4,6 +4,7 @@ import React from "react";
 import { Bar } from "react-chartjs-2";
 
 import { Chart as ChartJS } from "chart.js/auto";
+import { colors } from "@/constants/colors";
 
 export const BarChart = ({ data }) => {
   const chartData = {
@@ -11,11 +12,11 @@ export const BarChart = ({ data }) => {
     datasets: [
       {
         label: "Spending",
-        backgroundColor: "rgba(75,192,192,0.2)",
-        borderColor: "rgba(75,192,192,1)",
+        backgroundColor: colors.backgroundColour,
+        borderColor: colors.borderColor,
         borderWidth: 1,
-        hoverBackgroundColor: "rgba(75,192,192,0.4)",
-        hoverBorderColor: "rgba(75,192,192,1)",
+        hoverBackgroundColor: colors.hoverBackgroundColor,
+        hoverBorderColor: colors.hoverBorderColor,
         data: Object.values(data),
       },
     ],

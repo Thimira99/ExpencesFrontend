@@ -1,4 +1,3 @@
-// Dashboard.js
 "use client";
 
 import React, { useEffect, useState } from "react";
@@ -14,9 +13,9 @@ import {
   updateExpenseById,
 } from "@/utils/ApiRequests";
 import {
-  Badge,
   Box,
   Button,
+  Container,
   MenuItem,
   TextField,
   Typography,
@@ -264,7 +263,6 @@ export default function Dashboard() {
   // Handle filter change
   const onFilterChange = (e) => {
     e.preventDefault();
-    console.log("Came nnn");
 
     setfilterCategoryData(e.target.value);
     setLoading(true);
@@ -279,14 +277,14 @@ export default function Dashboard() {
   };
 
   return (
-    <div
+    <Container
       style={{
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
         justifyContent: "center",
         marginTop: 80,
-        padding: "1rem", // Add padding for better spacing
+        padding: "1rem",
       }}
     >
       <Typography
@@ -295,12 +293,12 @@ export default function Dashboard() {
       >
         My Expenses
       </Typography>
-      <div
+      <Container
         style={{
           display: "flex",
           gap: 10,
           justifyContent: "space-between",
-          width: "80%", // Adjust width to 100%
+          width: "100%",
           marginTop: 20,
         }}
       >
@@ -337,11 +335,11 @@ export default function Dashboard() {
         >
           Add Category
         </Button>
-      </div>
-      <div
+      </Container>
+      <Container
         style={{
           height: 400,
-          width: "70%", // Adjust width to 100%
+          width: "100%",
           padding: 20,
           background: "#fff",
           borderRadius: 8,
@@ -364,7 +362,7 @@ export default function Dashboard() {
             getRowId={getRowId}
           />
         )}
-      </div>
+      </Container>
       <DialogBox
         isOpen={isAddExpenseOpen}
         title="Add Expense"
@@ -413,6 +411,6 @@ export default function Dashboard() {
           onClose={() => setIsEditExpenseOpen(false)}
         />
       </DialogBox>
-    </div>
+    </Container>
   );
 }

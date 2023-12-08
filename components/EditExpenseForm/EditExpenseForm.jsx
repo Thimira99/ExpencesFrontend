@@ -54,8 +54,10 @@ export const EditExpenseForm = ({
         value={formData.amount}
         onChange={onInputChange}
       />
-      <Button onClick={onClose}>Cancel</Button>
-      <Button onClick={onSave} color="primary">
+      <Button onClick={onClose} color="primary">
+        Cancel
+      </Button>
+      <Button onClick={onSave} color="primary" variant="contained">
         Save
       </Button>
     </>

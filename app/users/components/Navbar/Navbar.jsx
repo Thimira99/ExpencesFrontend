@@ -1,4 +1,3 @@
-// Navbar.js
 "use client";
 
 import React, { useState } from "react";
@@ -13,10 +12,12 @@ import {
   MenuItem,
   Switch,
   useMediaQuery,
+  Container,
 } from "@mui/material";
 import CurrencyExchangeIcon from "@mui/icons-material/CurrencyExchange";
 import Brightness4Icon from "@mui/icons-material/Brightness4";
 import Brightness7Icon from "@mui/icons-material/Brightness7";
+import { colors } from "@/constants/colors";
 
 export const Navbar = () => {
   const router = useRouter();
@@ -49,13 +50,13 @@ export const Navbar = () => {
   };
 
   return (
-    <div>
+    <>
       <AppBar
         position="static"
-        style={{ background: darkMode ? "#2E3B4E" : "#2196F3" }}
+        style={{ background: darkMode ? colors.darkMode : colors.primary }}
       >
         <Toolbar style={{ justifyContent: "space-between" }}>
-          <div style={{ display: "flex", alignItems: "center" }}>
+          <Container style={{ display: "flex", alignItems: "center" }}>
             <IconButton
               size="large"
               edge="start"
@@ -68,19 +69,22 @@ export const Navbar = () => {
             <Typography
               variant="h6"
               component="div"
-              style={{ marginLeft: 10, color: darkMode ? "#fff" : "#000" }}
+              style={{
+                marginLeft: 10,
+                color: darkMode ? colors.secondary : colors.darkMode,
+              }}
             >
               Expense
             </Typography>
-          </div>
-
-          {isSmallScreen ? ( // Render responsive menu for small screens
+          </Container>
+          {isSmallScreen ? (
             <IconButton color="inherit" aria-label="menu" onClick={handleClick}>
               <Menu />
             </IconButton>
           ) : (
-            // Render regular menu items for larger screens
-            <div style={{ display: "flex", alignItems: "center" }}>
+            <Container
+              style={{ display: "flex", justifyContent: "flex-end", gap: 20 }}
+            >
               <Switch
                 checked={darkMode}
                 onChange={handleToggleDarkMode}
@@ -100,11 +104,11 @@ export const Navbar = () => {
               <Button
                 color="inherit"
                 onClick={() => handleLogout()}
-                style={{ color: darkMode ? "#fff" : "#000" }}
+                style={{ color: darkMode ? colors.secondary : colors.darkMode }}
               >
                 Logout
               </Button>
-            </div>
+            </Container>
           )}
 
           <Menu
@@ -122,6 +126,6 @@ export const Navbar = () => {
           </Menu>
         </Toolbar>
       </AppBar>
-    </div>
+    </>
   );
 };

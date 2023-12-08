@@ -5,12 +5,19 @@ import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
 import { CardActionArea } from "@mui/material";
 
-export const ChartCard = ({ onClick, title, subtitle, imagePath }) => {
+export const ChartCard = ({
+  onClick,
+  title,
+  subtitle,
+  imagePath,
+  minWidth,
+  maxWidth,
+}) => {
   return (
     <Card
       sx={{
-        minWidth: 300,
-        maxWidth: 400,
+        minWidth: minWidth,
+        maxWidth: maxWidth,
         margin: "1rem",
         "@media (max-width: 600px)": {
           minWidth: "100%", // Full width on small screens
@@ -26,7 +33,7 @@ export const ChartCard = ({ onClick, title, subtitle, imagePath }) => {
           src={imagePath}
         />
         <CardContent>
-          <Typography gutterBottom variant="h5" component="div">
+          <Typography gutterBottom variant="h5">
             {title}
           </Typography>
           <Typography variant="body2" color="text.secondary">

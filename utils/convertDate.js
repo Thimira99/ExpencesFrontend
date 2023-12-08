@@ -1,3 +1,4 @@
+// Convert to ISO date
 export const convertToIsoDate = (dateString) => {
   if (!dateString) {
     throw new Error("Invalid date string");
@@ -7,6 +8,7 @@ export const convertToIsoDate = (dateString) => {
   return isoDateString;
 };
 
+// Get current date
 export const getCurrentDate = () => {
   const today = new Date();
   const year = today.getFullYear();
