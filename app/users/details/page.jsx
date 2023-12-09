@@ -203,6 +203,7 @@ export default function Details() {
         />
       </Container>
 
+      {/* Daily dialog box open */}
       <DialogBox
         isOpen={dailyDialogOpen}
         onClose={() => setDailyDialogOpen(false)}
@@ -248,6 +249,7 @@ export default function Details() {
         </Button>
       </DialogBox>
 
+      {/* Monthly dialog box open */}
       <DialogBox
         isOpen={monthlyDialogOpen}
         onClose={() => setMonthlyDialogOpen(false)}
@@ -301,6 +303,7 @@ export default function Details() {
         </Button>
       </DialogBox>
 
+      {/* Month to date dialog box open */}
       <DialogBox
         isOpen={monthToDateOpen}
         onClose={() => setMonthToDateOpen(false)}
@@ -315,6 +318,7 @@ export default function Details() {
         )}
       </DialogBox>
 
+      {/* Year to date dialog box open */}
       <DialogBox
         isOpen={yearToDateOpen}
         onClose={() => setYearToDateOpen(false)}

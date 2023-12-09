@@ -1,13 +1,14 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Box, Button, Container, TextField, Typography } from "@mui/material";
 import * as yup from "yup";
 import Link from "next/link";
-import { ToastService } from "@/services/toast";
 import { loginAPI } from "@/utils/ApiRequests";
 import { jwtDecode } from "jwt-decode";
 import { useRouter } from "next/navigation";
+
+import { ToastService } from "@/services/toast";
 import HttpService from "@/services/httpService";
 
 const Login = () => {
@@ -16,6 +17,10 @@ const Login = () => {
   // Initializing values
   const [formData, setFormData] = useState({ email: "", password: "" });
   const [errors, setErrors] = useState({ email: "", password: "" });
+
+  useEffect(() => {
+    if (localStorage.getItem("token")) router.replace("/users/dashboard");
+  });
 
   // Handle change
   const handleChange = (field, value) => {
@@ -41,7 +46,6 @@ const Login = () => {
         handleLogin(formData);
       })
       .catch((error) => {
-        console.log(error);
         // If validation fails, handle the error (update errors state)
         const validationErrors = {};
         error.inner.forEach((err) => {
@@ -94,7 +98,7 @@ const Login = () => {
         marginTop={30}
         padding={5}
         borderRadius={10}
-        boxShadow="5px 5px 5px #ccc"
+        boxShadow="5px 5px 5px 5px"
       >
         <Typography variant="h3" padding={3}>
           Login

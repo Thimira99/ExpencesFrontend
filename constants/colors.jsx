@@ -12,4 +12,10 @@ export const colors = {
 
   // Darkmode
   darkMode: "#2E3B4E",
+
+  // Box shadow
+  boxShadow: "rgba(0, 0, 0, 0.1)",
+
+  // Table
+  tableBackground: "#fff",
 };

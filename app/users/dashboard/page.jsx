@@ -30,6 +30,7 @@ import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
 import CategoryIcon from "@mui/icons-material/Category";
 import CircularProgress from "@mui/material/CircularProgress";
 import HttpService from "@/services/httpService";
+import { colors } from "@/constants/colors";
 
 export default function Dashboard() {
   const [userDate, setUserData] = useState([]);
@@ -122,11 +123,11 @@ export default function Dashboard() {
           setUserExpense(res.data);
           setIsEditExpenseOpen(true);
         } else {
-          console.log("Data is undefined or null");
+          ToastService.error("Data is undefined or null");
         }
       })
       .catch((error) => {
-        console.error("Error fetching expense by ID:", error);
+        ToastService.error(error.response.data);
       })
       .finally(() => {
         setEditLoading(false);
@@ -171,7 +172,6 @@ export default function Dashboard() {
 
   const handleEditExpenseChange = (e) => {
     const { name, value } = e.target;
-    console.log(name, value);
     setUserExpense((prevData) => ({
       ...prevData,
       [name]: value,
@@ -205,8 +205,6 @@ export default function Dashboard() {
     const isoDate = convertToIsoDate(date);
     const amountNumber = Number(amount);
     const updatedExpenseData = { ...rest, date: isoDate, amount: amountNumber };
-
-    console.log(updatedExpenseData);
 
     // Make axios call
     HttpService.fetch("POST", addExpenses, updatedExpenseData)
@@ -341,9 +339,9 @@ export default function Dashboard() {
           height: 400,
           width: "100%",
           padding: 20,
-          background: "#fff",
+          background: colors.tableBackground,
           borderRadius: 8,
-          boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
+          boxShadow: `0 2px 4px ${colors.boxShadow}`,
           marginTop: 20,
         }}
       >
@@ -357,7 +355,7 @@ export default function Dashboard() {
           <DataGrid
             rows={userDate}
             columns={columns}
-            pageSize={5}
+            // pageSize={5}
             checkboxSelection
             getRowId={getRowId}
           />

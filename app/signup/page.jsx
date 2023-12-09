@@ -77,7 +77,6 @@ const SignUpPage = () => {
   const handleSignUp = (data) => {
     HttpService.fetch("POST", signupAPI, data)
       .then((res) => {
-        console.log(res.data);
         ToastService.success("Registered successfully.");
         router.push("/login");
       })
@@ -100,7 +99,7 @@ const SignUpPage = () => {
         marginTop={25}
         padding={5}
         borderRadius={10}
-        boxShadow="5px 5px 5px #ccc"
+        boxShadow="5px 5px 5px 5px"
       >
         <Typography variant="h3" padding={3}>
           Sign up
