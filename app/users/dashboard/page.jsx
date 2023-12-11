@@ -280,6 +280,7 @@ export default function Dashboard() {
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
+        gap: 20,
         justifyContent: "center",
         marginTop: 80,
         padding: "1rem",
@@ -297,7 +298,6 @@ export default function Dashboard() {
           gap: 10,
           justifyContent: "space-between",
           width: "100%",
-          marginTop: 20,
         }}
       >
         <TextField
@@ -342,7 +342,6 @@ export default function Dashboard() {
           background: colors.tableBackground,
           borderRadius: 8,
           boxShadow: `0 2px 4px ${colors.boxShadow}`,
-          marginTop: 20,
         }}
       >
         {loading || editLoading ? (
@@ -355,12 +354,13 @@ export default function Dashboard() {
           <DataGrid
             rows={userDate}
             columns={columns}
-            // pageSize={5}
+            pageSize={5}
             checkboxSelection
             getRowId={getRowId}
           />
         )}
       </Container>
+
       <DialogBox
         isOpen={isAddExpenseOpen}
         title="Add Expense"

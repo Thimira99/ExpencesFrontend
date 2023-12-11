@@ -77,5 +77,4 @@ class HttpService {
   }
 }
 
-// Export the HttpService class
 export default HttpService;
